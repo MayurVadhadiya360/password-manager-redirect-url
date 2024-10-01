@@ -216,20 +216,24 @@
             const accessToken = findUrlParameter("access_token");
             const appLinkScheme = "com.password_manager.password_manager";
             const appLinkAuthority = "app.password_manager.com";
-            const appLinkUrl = `http://127.0.0.1:56584/google-auth?id_token=${idToken}&access_token=${accessToken}`;
+            // const appLinkUrl = `${appLinkScheme}://${appLinkAuthority}/google-auth?id_token=${idToken}&access_token=${accessToken}`;
+            const appLinkUrl = `http://localhost:56584/google-auth?id_token=${idToken}&access_token=${accessToken}`;
+            
 
             // Open the app link in a new, hidden window
             const newWindow = window.open(appLinkUrl, '_blank');
 
             // Close the new window immediately if it's created successfully
             setTimeout(() => {
+                console.log("settimeout");
                 if (newWindow) {
+                    console.log("settimeout", newWindow);
+
                     newWindow.opener = null;
                     newWindow.blur(); // Remove focus from the new window
                     newWindow.close(); // Close the window to avoid user disruption
                 }
-            }, 100);newWindow.close(); // Close the window to avoid user disruption
-            }
+            }, 100);
         });
 
 
