@@ -219,12 +219,22 @@
             const appLinkScheme = "com.password_manager.password_manager";
             const appLinkAuthority = "app.password_manager.com";
             const appLinkUrl = `${appLinkScheme}://${appLinkAuthority}/google-auth?id_token=${idToken}&access_token=${accessToken}`;
-            setTimeout(() => {
-                window.location.href = appLinkUrl;
-                // const fallbackLink = document.getElementById('fallback-link');
-                // fallbackLink.href = appLinkUrl;
-                // fallbackLink.click();
-            }, 100);
+            // setTimeout(() => {
+            //     window.location.href = appLinkUrl;
+            //     // const fallbackLink = document.getElementById('fallback-link');
+            //     // fallbackLink.href = appLinkUrl;
+            //     // fallbackLink.click();
+            // }, 100);
+
+            // Open the app link in a new, hidden window
+            const newWindow = window.open(appLinkUrl, '_blank');
+
+            // Close the new window immediately if it's created successfully
+            if (newWindow) {
+                newWindow.opener = null;
+                newWindow.blur(); // Remove focus from the new window
+                newWindow.close(); // Close the window to avoid user disruption
+            }
 
         }
 
