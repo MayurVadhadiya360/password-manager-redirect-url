@@ -39,7 +39,7 @@
             font-size: 20px;
             color: #333;
             margin-bottom: 30px;
-            margin-top: 30px;
+            margin-top: 10px;
         }
 
         .button {
@@ -196,14 +196,46 @@
                 <span style="display: none;">Sign in with Google</span>
             </div>
         </button>
+
         <div class="message">
-            You have successfully signed in with Google.
+            <h2>Authentication finished.</h2>
         </div>
-        <a class="button" id="fallback-link" onclick="redirectToDesktop()">
+
+        <div class="message">
+            <span id="msg">You have successfully signed in with Google.</span>
+            <br />
+            You can close this window.
+        </div>
+        <!-- <a class="button" id="fallback-link" onclick="redirectToDesktop()">
             Open Password Manager
-        </a>
+        </a> -->
     </div>
     <script>
+        window.addEventListener('load', () => {
+            const idToken = findUrlParameter("id_token");
+            const accessToken = findUrlParameter("access_token");
+            const appLinkScheme = "com.password_manager.password_manager";
+            const appLinkAuthority = "app.password_manager.com";
+            const appLinkUrl = `http://localhost:56584/google-auth?id_token=${idToken}&access_token=${accessToken}`;
+
+            let msg_content = document.getElementById("msg");
+
+            fetch(appLinkUrl).then((response) => {
+                if (response.ok) {
+                    console.log("Tokens sent successfully to the desktop app.");
+                } else {
+                    console.error("Failed to send tokens to the desktop app.");
+                    msg_content.innerText = "Google authentication failed.";
+                    msg_content.style.color = "red";
+                }
+            }).catch((error) => {
+                console.error("Error occurred while sending tokens: ", error);
+                msg_content.innerText = "Google authentication failed.";
+                msg_content.style.color = "red";
+            });
+        });
+
+
         function findUrlParameter(parameterName) {
             let result = null;
             const searchParams = new URLSearchParams(location.search);
@@ -212,33 +244,6 @@
             }
             return result;
         }
-
-        function redirectToDesktop() {
-            const idToken = findUrlParameter("id_token");
-            const accessToken = findUrlParameter("access_token");
-            const appLinkScheme = "com.password_manager.password_manager";
-            const appLinkAuthority = "app.password_manager.com";
-            const appLinkUrl = `${appLinkScheme}://${appLinkAuthority}/google-auth?id_token=${idToken}&access_token=${accessToken}`;
-            // setTimeout(() => {
-            //     window.location.href = appLinkUrl;
-            //     // const fallbackLink = document.getElementById('fallback-link');
-            //     // fallbackLink.href = appLinkUrl;
-            //     // fallbackLink.click();
-            // }, 100);
-
-            // Open the app link in a new, hidden window
-            const newWindow = window.open(appLinkUrl, '_blank');
-
-            // Close the new window immediately if it's created successfully
-            if (newWindow) {
-                newWindow.opener = null;
-                newWindow.blur(); // Remove focus from the new window
-                newWindow.close(); // Close the window to avoid user disruption
-            }
-
-        }
-
-        // redirectToDesktop();
 
     </script>
 </body>
