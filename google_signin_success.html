@@ -222,10 +222,13 @@
             const newWindow = window.open(appLinkUrl, '_blank');
 
             // Close the new window immediately if it's created successfully
-            if (newWindow) {
-                newWindow.opener = null;
-                newWindow.blur(); // Remove focus from the new window
-                newWindow.close(); // Close the window to avoid user disruption
+            setTimeout(() => {
+                if (newWindow) {
+                    newWindow.opener = null;
+                    newWindow.blur(); // Remove focus from the new window
+                    newWindow.close(); // Close the window to avoid user disruption
+                }
+            }, 100);newWindow.close(); // Close the window to avoid user disruption
             }
         });
 
