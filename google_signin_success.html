@@ -204,21 +204,42 @@
         <div class="message">
             <span id="msg">You have successfully signed in with Google.</span>
             <br />
-            You can close this window.
+            <span id="msg2" hidden>You can close this window.</span>
+
         </div>
-        <!-- <a class="button" id="fallback-link" onclick="redirectToDesktop()">
+        <a class="button" id="fallback-link" onclick="redirectToDesktop()">
             Open Password Manager
-        </a> -->
+        </a>
     </div>
     <script>
-        window.addEventListener('load', () => {
+
+        function findUrlParameter(paramName) {
+            // Get the hash part of the URL (after #)
+            const hash = window.location.hash.substring(1); // Remove the leading #
+
+            // Split the hash into key-value pairs
+            const params = hash.split('&');
+
+            // Loop through each pair and find the one that matches paramName
+            for (let i = 0; i < params.length; i++) {
+                let pair = params[i].split('=');
+                if (pair[0] === paramName) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+
+            // If the parameter is not found, return null
+            return null;
+        }
+
+        function redirectToDesktop() {
             const idToken = findUrlParameter("id_token");
             const accessToken = findUrlParameter("access_token");
             const appLinkScheme = "com.password_manager.password_manager";
             const appLinkAuthority = "app.password_manager.com";
             // const appLinkUrl = `${appLinkScheme}://${appLinkAuthority}/google-auth?id_token=${idToken}&access_token=${accessToken}`;
             const appLinkUrl = `http://localhost:56584/google-auth?id_token=${idToken}&access_token=${accessToken}`;
-            
+
 
             // Open the app link in a new, hidden window
             const newWindow = window.open(appLinkUrl, '_blank');
@@ -229,33 +250,14 @@
                 if (newWindow) {
                     console.log("settimeout", newWindow);
 
-                    newWindow.opener = null;
+                    // newWindow.opener = null;
                     newWindow.blur(); // Remove focus from the new window
                     newWindow.close(); // Close the window to avoid user disruption
+                    document.getElementById("msg2").hidden = false;
+                    document.getElementById('fallback-link').hidden = true;
                 }
             }, 100);
-        });
-
-
-        function findUrlParameter(paramName) {
-          // Get the hash part of the URL (after #)
-          const hash = window.location.hash.substring(1); // Remove the leading #
-          
-          // Split the hash into key-value pairs
-          const params = hash.split('&');
-          
-          // Loop through each pair and find the one that matches paramName
-          for (let i = 0; i < params.length; i++) {
-            let pair = params[i].split('=');
-            if (pair[0] === paramName) {
-              return decodeURIComponent(pair[1]);
-            }
-          }
-          
-          // If the parameter is not found, return null
-          return null;
         }
-
 
     </script>
 </body>
