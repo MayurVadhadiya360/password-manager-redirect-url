@@ -218,21 +218,15 @@
             const appLinkAuthority = "app.password_manager.com";
             const appLinkUrl = `http://127.0.0.1:56584/google-auth?id_token=${idToken}&access_token=${accessToken}`;
 
-            let msg_content = document.getElementById("msg");
+            // Open the app link in a new, hidden window
+            const newWindow = window.open(appLinkUrl, '_blank');
 
-            fetch(appLinkUrl).then((response) => {
-                if (response.ok) {
-                    console.log("Tokens sent successfully to the desktop app.");
-                } else {
-                    console.error("Failed to send tokens to the desktop app.");
-                    msg_content.innerText = "Google authentication failed.";
-                    msg_content.style.color = "red";
-                }
-            }).catch((error) => {
-                console.error("Error occurred while sending tokens: ", error);
-                msg_content.innerText = "Google authentication failed.";
-                msg_content.style.color = "red";
-            });
+            // Close the new window immediately if it's created successfully
+            if (newWindow) {
+                newWindow.opener = null;
+                newWindow.blur(); // Remove focus from the new window
+                newWindow.close(); // Close the window to avoid user disruption
+            }
         });
 
 
