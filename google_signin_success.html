@@ -236,14 +236,25 @@
         });
 
 
-        function findUrlParameter(parameterName) {
-            let result = null;
-            const searchParams = new URLSearchParams(location.search);
-            if (searchParams.has(parameterName)) {
-                result = searchParams.get(parameterName);
+        function findUrlParameter(paramName) {
+          // Get the hash part of the URL (after #)
+          const hash = window.location.hash.substring(1); // Remove the leading #
+          
+          // Split the hash into key-value pairs
+          const params = hash.split('&');
+          
+          // Loop through each pair and find the one that matches paramName
+          for (let i = 0; i < params.length; i++) {
+            let pair = params[i].split('=');
+            if (pair[0] === paramName) {
+              return decodeURIComponent(pair[1]);
             }
-            return result;
+          }
+          
+          // If the parameter is not found, return null
+          return null;
         }
+
 
     </script>
 </body>
