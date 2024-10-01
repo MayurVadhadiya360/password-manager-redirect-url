@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In Success</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+        }
+
+        .container {
+            text-align: center;
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .google-logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            background-color: #4285f4;
+            color: #ffffff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #357ae8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" alt="Google Logo"
+            class="google-logo">
+        <div class="message">
+            You have successfully signed in with Google.
+        </div>
+        <a href="com.password_manager.password_manager://app.example.com/google-auth" class="button" onclick="redirectToDesktop()">
+            Open Password Manager
+        </a>
+    </div>
+    <script>
+        function findUrlParameter(parameterName) {
+            let result = null;
+            const searchParams = new URLSearchParams(location.search);
+            if (searchParams.has(parameterName)) {
+                result = searchParams.get(parameterName);
+            }
+            return result;
+        }
+
+        function redirectToDesktop() {
+            const idToken = findUrlParameter("id_token");
+            const accessToken = findUrlParameter("access_token");
+            const appLinkScheme = "example-scheme";
+            const appLinkAuthority = "app.example.com";
+            const appLinkUrl = `${appLinkScheme}://${appLinkAuthority}/google-auth?id_token=${idToken}&access_token=${accessToken}`;
+            setTimeout(() => {
+                window.location.href = url;
+            }, 100);
+        }
+
+        // redirectToDesktop();
+
+    </script>
+</body>
+
+</html>
